@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.sql.*;
+import java.util.*;
+
+import org.zerock.smcal.util.Database;
 
 public class MainController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -18,10 +20,7 @@ public class MainController extends HttpServlet {
             return;
         }
 
-        // Calendar 객체 생성
         Calendar calendar = new GregorianCalendar();
-
-        // year와 month 파라미터를 받아 현재 날짜를 설정
         String yearParam = request.getParameter("year");
         String monthParam = request.getParameter("month");
 
@@ -34,12 +33,32 @@ public class MainController extends HttpServlet {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
         }
 
-        // 현재 year와 month를 request에 설정
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
 
+        Map<Integer, List<String>> eventsByDay = new HashMap<>();
+
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT user_id, title, DAY(event_date) as day FROM events WHERE MONTH(event_date) = ? AND YEAR(event_date) = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setInt(1, month + 1);
+                pstmt.setInt(2, year);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        int day = rs.getInt("day");
+                        String event = rs.getString("user_id") + " " + rs.getString("title");
+
+                        eventsByDay.computeIfAbsent(day, k -> new ArrayList<>()).add(event);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         request.setAttribute("year", year);
         request.setAttribute("month", month);
+        request.setAttribute("eventsByDay", eventsByDay);
         request.setAttribute("calendar", calendar);
 
         request.getRequestDispatcher("/WEB-INF/views/main.jsp").forward(request, response);

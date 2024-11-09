@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.Calendar, java.util.GregorianCalendar" %>
+<%@ page import="java.util.Calendar, java.util.GregorianCalendar, java.util.Map, java.util.List" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -15,6 +15,7 @@
             height: 100px;
             border: 1px solid #ddd;
             text-align: center;
+            vertical-align: top;
         }
         .nav-btn {
             padding: 10px;
@@ -32,29 +33,25 @@
         int year = (Integer) request.getAttribute("year");
         int month = (Integer) request.getAttribute("month");
 
-        // 이전 달 설정
         Calendar prevCalendar = new GregorianCalendar(year, month, 1);
         prevCalendar.add(Calendar.MONTH, -1);
         int prevYear = prevCalendar.get(Calendar.YEAR);
         int prevMonth = prevCalendar.get(Calendar.MONTH);
 
-        // 다음 달 설정
         Calendar nextCalendar = new GregorianCalendar(year, month, 1);
         nextCalendar.add(Calendar.MONTH, 1);
         int nextYear = nextCalendar.get(Calendar.YEAR);
         int nextMonth = nextCalendar.get(Calendar.MONTH);
 
-        // 현재 날짜를 나타내는 today 객체 선언
         Calendar today = Calendar.getInstance();
+        Map<Integer, List<String>> eventsByDay = (Map<Integer, List<String>>) request.getAttribute("eventsByDay");
     %>
 
-    <!-- 이전 달 및 다음 달 버튼 -->
     <a href="smcal?year=<%= prevYear %>&month=<%= prevMonth %>" class="nav-btn">이전 달</a>
     <h2><%= year %>년 <%= month + 1 %>월 달력</h2>
     <a href="smcal?year=<%= nextYear %>&month=<%= nextMonth %>" class="nav-btn">다음 달</a>
 </div>
 
-<!-- 달력 표시 -->
 <table>
     <thead>
     <tr>
@@ -81,13 +78,26 @@
                 }
 
                 if (started && currentDay <= daysInMonth) {
-                    // 오늘 날짜와 일치하면 'today' 클래스를 적용
                     boolean isToday = (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
                             cal.get(Calendar.MONTH) == today.get(Calendar.MONTH) &&
                             currentDay == today.get(Calendar.DAY_OF_MONTH));
                     String cellClass = isToday ? "today" : "";
         %>
-        <td class="<%= cellClass %>"><%= currentDay %></td>
+        <td class="<%= cellClass %>">
+            <%= currentDay %>
+            <ul>
+                <%
+                    List<String> events = eventsByDay.get(currentDay);
+                    if (events != null) {
+                        for (String event : events) {
+                %>
+                <li><%= event %></li>
+                <%
+                        }
+                    }
+                %>
+            </ul>
+        </td>
         <%
             currentDay++;
         } else {
@@ -107,9 +117,8 @@
     </tbody>
 </table>
 
-<!-- 작성 페이지와 로그아웃 버튼 -->
 <div style="margin-top: 20px;">
-    <a href="writePage.jsp" class="nav-btn">작성 페이지로 이동</a>
+    <a href="write" class="nav-btn">작성 페이지로 이동</a>
     <a href="logout" class="nav-btn">로그아웃</a>
 </div>
 </body>

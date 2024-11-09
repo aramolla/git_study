@@ -14,7 +14,7 @@ public class Database {
                 Class.forName("org.mariadb.jdbc.Driver");
 
                 // 데이터베이스 연결 정보 설정
-                String url = "jdbc:mariadb://pilab.smu.ac.kr:3306/dkfk1640_db";
+                String url = "jdbc:mariadb://pilab.smu.ac.kr:3306/dkfk1640_db?useUnicode=true&characterEncoding=UTF-8";
                 String username = "dkfk1640";
                 String password = "xL7vD3qJtY!";
 

@@ -57,5 +57,15 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>WriteController</servlet-name>
+        <servlet-class>org.zerock.smcal.WriteController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WriteController</servlet-name>
+        <url-pattern>/write</url-pattern>
+    </servlet-mapping>
+
+
 
 </web-app>

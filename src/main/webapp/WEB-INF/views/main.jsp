@@ -21,16 +21,37 @@
             font-size: 16px;
         }
         .today {
-            background-color: yellow;  /* 오늘 날짜의 배경 색상 */
+            background-color: yellow;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
 <div style="display: flex; justify-content: space-between; align-items: center;">
-    <a href="main?year=${year}&month=${month - 1}" class="nav-btn">이전 달</a>
-    <h2>${year}년 ${month + 1}월 달력</h2>
-    <a href="main?year=${year}&month=${month + 1}" class="nav-btn">다음 달</a>
+    <%
+        int year = (Integer) request.getAttribute("year");
+        int month = (Integer) request.getAttribute("month");
+
+        // 이전 달 설정
+        Calendar prevCalendar = new GregorianCalendar(year, month, 1);
+        prevCalendar.add(Calendar.MONTH, -1);
+        int prevYear = prevCalendar.get(Calendar.YEAR);
+        int prevMonth = prevCalendar.get(Calendar.MONTH);
+
+        // 다음 달 설정
+        Calendar nextCalendar = new GregorianCalendar(year, month, 1);
+        nextCalendar.add(Calendar.MONTH, 1);
+        int nextYear = nextCalendar.get(Calendar.YEAR);
+        int nextMonth = nextCalendar.get(Calendar.MONTH);
+
+        // 현재 날짜를 나타내는 today 객체 선언
+        Calendar today = Calendar.getInstance();
+    %>
+
+    <!-- 이전 달 및 다음 달 버튼 -->
+    <a href="smcal?year=<%= prevYear %>&month=<%= prevMonth %>" class="nav-btn">이전 달</a>
+    <h2><%= year %>년 <%= month + 1 %>월 달력</h2>
+    <a href="smcal?year=<%= nextYear %>&month=<%= nextMonth %>" class="nav-btn">다음 달</a>
 </div>
 
 <!-- 달력 표시 -->
@@ -43,7 +64,6 @@
     <tbody>
     <%
         Calendar cal = (Calendar) request.getAttribute("calendar");
-        Calendar today = new GregorianCalendar();  // 오늘 날짜
         cal.set(Calendar.DAY_OF_MONTH, 1);
         int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -87,7 +107,6 @@
     </tbody>
 </table>
 
-<!-- 작성 페이지와 로그아웃 버튼 -->
 <!-- 작성 페이지와 로그아웃 버튼 -->
 <div style="margin-top: 20px;">
     <a href="writePage.jsp" class="nav-btn">작성 페이지로 이동</a>

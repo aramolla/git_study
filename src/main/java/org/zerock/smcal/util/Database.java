@@ -38,9 +38,12 @@ public class Database {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next();  // 결과가 있으면 true 반환
+                boolean userExists = rs.next();  // 결과가 있으면 true 반환
+                System.out.println("로그인 시도: " + username + ", 성공 여부: " + userExists);
+                return userExists;  // 결과가 있으면 true 반환
             }
         } catch (SQLException e) {
+            System.out.println("SQL 예외 발생: " + e.getMessage());
             e.printStackTrace();
         }
         return false;  // 일치하는 사용자가 없으면 false 반환
@@ -54,14 +57,18 @@ public class Database {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             pstmt.executeUpdate();
+            System.out.println("사용자 등록 성공: " + username);  // 성공 로그
             return true;  // 성공적으로 추가 시 true 반환
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {  // 중복된 username일 경우
-                System.out.println("이미 존재하는 사용자 이름입니다.");
+                System.out.println("이미 존재하는 사용자 이름입니다: " + username);
             } else {
-                e.printStackTrace();
+                System.out.println("SQL 예외 발생: " + e.getMessage());
             }
+            e.printStackTrace();
         }
+        System.out.println("사용자 등록 실패: " + username);  // 실패 로그
         return false;  // 추가 실패 시 false 반환
     }
+
 }

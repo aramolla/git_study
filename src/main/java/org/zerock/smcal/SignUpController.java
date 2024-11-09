@@ -16,6 +16,7 @@ public class SignUpController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        // Database의 addUser 메서드를 호출
         if (Database.addUser(username, password)) {
             response.sendRedirect("login");
         } else {

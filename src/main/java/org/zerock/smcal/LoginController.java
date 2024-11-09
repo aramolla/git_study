@@ -18,7 +18,7 @@ public class LoginController extends HttpServlet {
         if (Database.isValidUser(username, password)) {
             HttpSession session = request.getSession();
             session.setAttribute("user", username);
-            response.sendRedirect("main");
+            response.sendRedirect("smcal");
         } else {
             response.sendRedirect("loginError");
         }
@@ -32,7 +32,7 @@ public class LoginController extends HttpServlet {
 
         if (session != null && session.getAttribute("user") != null && forceLogin == null) {
             // 세션이 존재하고 로그인 상태이며, forceLogin 파라미터가 없을 경우 main으로 리다이렉트
-            response.sendRedirect("main");
+            response.sendRedirect("smcal");
         } else {
             // forceLogin 파라미터가 있거나 세션이 없을 경우 login 페이지로 포워드
             request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);

@@ -7,9 +7,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import javax.servlet.http.HttpSession;
 
 public class MainController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
+        // 세션이 없거나, 세션에 사용자 정보가 없으면 로그인 페이지로 리다이렉트
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
         Calendar calendar = new GregorianCalendar();
 
         int year = calendar.get(Calendar.YEAR);

@@ -27,7 +27,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
-        <url-pattern>/main</url-pattern>
+        <url-pattern>/smcal</url-pattern>
     </servlet-mapping>
 
     <servlet>

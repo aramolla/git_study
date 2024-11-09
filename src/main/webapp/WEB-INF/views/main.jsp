@@ -90,12 +90,19 @@
                     List<String> events = eventsByDay.get(currentDay);
                     if (events != null) {
                         for (String event : events) {
+                            String[] eventDetails = event.split(" ");
+                            if (eventDetails.length >= 3) { // 길이를 확인하여 안전하게 접근
+                                String eventId = eventDetails[0]; // event ID
+                                String eventUserId = eventDetails[1]; // user ID
+                                String eventTitle = eventDetails[2]; // event title
                 %>
-                <li><%= event %></li>
+                <li><a href="edit?id=<%= eventId %>"><%= eventUserId %> <%= eventTitle %></a></li>
                 <%
+                            }
                         }
                     }
                 %>
+
             </ul>
         </td>
         <%

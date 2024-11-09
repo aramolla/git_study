@@ -39,14 +39,14 @@ public class MainController extends HttpServlet {
         Map<Integer, List<String>> eventsByDay = new HashMap<>();
 
         try (Connection conn = Database.getConnection()) {
-            String query = "SELECT user_id, title, DAY(event_date) as day FROM events WHERE MONTH(event_date) = ? AND YEAR(event_date) = ?";
+            String query = "SELECT id, user_id, title, DAY(event_date) as day FROM events WHERE MONTH(event_date) = ? AND YEAR(event_date) = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(query)) {
                 pstmt.setInt(1, month + 1);
                 pstmt.setInt(2, year);
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {
                         int day = rs.getInt("day");
-                        String event = rs.getString("user_id") + " " + rs.getString("title");
+                        String event = rs.getInt("id") + " " + rs.getString("user_id") + " " + rs.getString("title");
 
                         eventsByDay.computeIfAbsent(day, k -> new ArrayList<>()).add(event);
                     }

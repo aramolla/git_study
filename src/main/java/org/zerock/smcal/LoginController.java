@@ -26,10 +26,17 @@ public class LoginController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("user") != null) {
+
+        // 로그인 페이지 강제 접근을 위한 파라미터
+        String forceLogin = request.getParameter("forceLogin");
+
+        if (session != null && session.getAttribute("user") != null && forceLogin == null) {
+            // 세션이 존재하고 로그인 상태이며, forceLogin 파라미터가 없을 경우 main으로 리다이렉트
             response.sendRedirect("main");
         } else {
+            // forceLogin 파라미터가 있거나 세션이 없을 경우 login 페이지로 포워드
             request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
         }
     }
+
 }

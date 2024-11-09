@@ -96,7 +96,12 @@
                                 String eventUserId = eventDetails[1]; // user ID
                                 String eventTitle = eventDetails[2]; // event title
                 %>
-                <li><a href="edit?id=<%= eventId %>"><%= eventUserId %> <%= eventTitle %></a></li>
+                <li>
+                    <a href="edit?id=<%= eventId %>">
+                        [<%= eventUserId %>]<br>
+                        <%= eventTitle %>
+                    </a>
+                </li>
                 <%
                             }
                         }

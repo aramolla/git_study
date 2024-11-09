@@ -5,7 +5,7 @@
   <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Hello World!" %></h1>
+<h1><%= "smcal로 이동해주세요" %></h1>
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
 </body>

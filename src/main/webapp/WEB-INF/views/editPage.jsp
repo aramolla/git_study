@@ -10,7 +10,7 @@
 <form action="edit" method="post">
     <input type="hidden" name="id" value="${id}">
 
-    <label for="title">일정 제목:</label>
+    <label for="title">일정:</label>
     <input type="text" id="title" name="title" value="${title}" required><br><br>
 
     <label for="date">날짜:</label>

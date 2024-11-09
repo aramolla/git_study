@@ -16,6 +16,7 @@
             border: 1px solid #ddd;
             text-align: center;
             vertical-align: top;
+            font-size: 15px; /* 전체 글자 크기 조정 */
         }
         .nav-btn {
             padding: 10px;
@@ -24,6 +25,24 @@
         .today {
             background-color: yellow;
             font-weight: bold;
+        }
+        .event-title {
+            display: block;
+            font-size: 10px; /* 일정 제목의 글자 크기 조정 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        .event-title:hover {
+            overflow: visible;
+            white-space: normal;
+            background-color: #f0f0f0;
+            padding: 2px;
+            border-radius: 4px;
+            z-index: 1;
+            position: absolute;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -95,11 +114,11 @@
                                 String eventId = eventDetails[0]; // event ID
                                 String eventUserId = eventDetails[1]; // user ID
                                 String eventTitle = eventDetails[2]; // event title
+                                String displayTitle = "[" + eventUserId + "] " + eventTitle;
                 %>
                 <li>
                     <a href="edit?id=<%= eventId %>">
-                        [<%= eventUserId %>]<br>
-                        <%= eventTitle %>
+                        <span class="event-title" title="<%= displayTitle %>"><%= displayTitle %></span>
                     </a>
                 </li>
                 <%
